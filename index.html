@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>William</title>
+<meta name="description" content="Chat with William, Naz's AI buddy.">
+<meta name="theme-color" content="#0b0d14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="William">
+<link rel="icon" href="avatar.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="avatar.svg">
+<script>try{var t=localStorage.getItem("william-theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="who">
+      <div class="avatar"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--a1)"/><stop offset="1" stop-color="var(--a2)"/></linearGradient></defs><rect width="64" height="64" rx="32" fill="url(#g)"/><line x1="32" y1="9" x2="32" y2="15" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="8" r="3" fill="#fff"/><rect x="14" y="16" width="36" height="32" rx="10" fill="rgba(0,0,0,.28)" stroke="#fff" stroke-width="2.5"/><path d="M20 26 L24.5 39 L29 29 L32 35 L35 29 L39.5 39 L44 26" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="10" y="27" width="4" height="10" rx="2" fill="#fff"/><rect x="50" y="27" width="4" height="10" rx="2" fill="#fff"/></svg><span class="dot" aria-hidden="true"></span></div>
+      <div class="meta"><h1>William</h1><p class="status" id="status">online</p></div>
+    </div>
+    <div class="actions">
+      <button class="icon" id="themeBtn" aria-label="Change theme" title="Theme">🎨</button>
+      <button class="pill" id="newBtn" aria-label="Start a new chat">New chat</button>
+    </div>
+  </header>
+
+  <main class="chat" id="chat" aria-live="polite">
+    <section class="welcome" id="welcome">
+      <div class="big-avatar"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--a1)"/><stop offset="1" stop-color="var(--a2)"/></linearGradient></defs><rect width="64" height="64" rx="32" fill="url(#g2)"/><line x1="32" y1="9" x2="32" y2="15" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="8" r="3" fill="#fff"/><rect x="14" y="16" width="36" height="32" rx="10" fill="rgba(0,0,0,.28)" stroke="#fff" stroke-width="2.5"/><path d="M20 26 L24.5 39 L29 29 L32 35 L35 29 L39.5 39 L44 26" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><rect x="10" y="27" width="4" height="10" rx="2" fill="#fff"/><rect x="50" y="27" width="4" height="10" rx="2" fill="#fff"/></svg></div>
+      <h2>Hey, I'm William 👋</h2>
+      <p>Your AI buddy. Ask me anything — homework, ideas, jokes, advice.</p>
+    </section>
+    <div id="messages" class="messages"></div>
+  </main>
+
+  <div class="chips" id="chips">
+    <button class="chip" type="button">Tell me a joke</button>
+    <button class="chip" type="button">Help with homework</button>
+    <button class="chip" type="button">Who are you?</button>
+    <button class="chip" type="button">Give me a fun fact</button>
+  </div>
+
+  <form class="composer" id="form" autocomplete="off">
+    <textarea id="input" rows="1" placeholder="Message William…" aria-label="Message William" enterkeyhint="send"></textarea>
+    <button id="send" class="send" type="submit" aria-label="Send" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </form>
+</div>
+
+<div class="sheet-bg" id="sheetBg" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="grab"></div>
+    <h3 id="sheetTitle">Pick a theme</h3>
+    <div class="themes" id="themes"></div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
