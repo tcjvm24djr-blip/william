@@ -22,11 +22,11 @@ const STORE_KEY = "william-chat";
 const THEME_KEY = "william-theme";
 
 const THEMES = [
-  { id: "modern",  name: "Modern",   sw: ["#0b0d14", "#6d5cff", "#22d3ee"], meta: "#0b0d14" },
-  { id: "ironman", name: "Iron Man", sw: ["#1c0a0a", "#c8102e", "#f2b632"], meta: "#0d0606" },
-  { id: "neon",    name: "Neon",     sw: ["#06060c", "#ff2bd6", "#00f0ff"], meta: "#06060c" },
-  { id: "ocean",   name: "Ocean",    sw: ["#03131c", "#0ea5e9", "#2dd4bf"], meta: "#03131c" },
-  { id: "light",   name: "Light",    sw: ["#ffffff", "#3b82f6", "#8b5cf6"], meta: "#f4f5f9" },
+  { id: "modern",  name: "Graphite", sw: ["#1c1c1f", "#ff6b3d"], meta: "#0e0e10" },
+  { id: "ironman", name: "Iron Man", sw: ["#a61e1e", "#e3ac45"], meta: "#110a09" },
+  { id: "neon",    name: "Neon",     sw: ["#16161d", "#d4ff3a"], meta: "#07070a" },
+  { id: "ocean",   name: "Ocean",    sw: ["#13212b", "#62c9d9"], meta: "#0a141b" },
+  { id: "light",   name: "Light",    sw: ["#f0f0f2", "#121214"], meta: "#ffffff" },
 ];
 
 /* ============================================================ */
@@ -169,7 +169,7 @@ function waitWithCountdown(secs) {
     let left = secs;
     const tick = () => {
       if (left <= 0) { setStatus(true); return resolve(); }
-      statusEl.textContent = `catching his breath… ${left}s`;
+      statusEl.textContent = `catching his breath · ${left}s`;
       left--; setTimeout(tick, 1000);
     };
     tick();
@@ -189,9 +189,9 @@ async function reply() {
     bubble("assistant", text);
   } catch (e) {
     typing.remove();
-    const row = bubble("assistant", e && e.name === "AbortError" ? "William's thinking too hard (took too long). Try again?" : "William's thinking too hard, try again 😅", "err");
+    const row = bubble("assistant", e && e.name === "AbortError" ? "He took too long to answer." : (e && e.message === "rate limited" ? "He's getting a lot of messages. Give it a few seconds." : "That didn't go through."), "err");
     const btn = document.createElement("button");
-    btn.className = "retry"; btn.type = "button"; btn.textContent = "↻ Try again";
+    btn.className = "retry"; btn.type = "button"; btn.textContent = "Try again";
     btn.onclick = () => { row.remove(); reply(); };
     row.querySelector(".bubble").appendChild(btn);
   } finally {
@@ -218,12 +218,20 @@ input.addEventListener("keydown", (e) => {
 });
 input.addEventListener("focus", () => setTimeout(() => scrollDown(), 300));
 form.addEventListener("submit", (e) => { e.preventDefault(); send(input.value); });
-chips.addEventListener("click", (e) => { const c = e.target.closest(".chip"); if (c) send(c.textContent); });
+chips.addEventListener("click", (e) => { const c = e.target.closest(".chip"); if (c) send(c.dataset.q || c.textContent); });
 $("#newBtn").addEventListener("click", () => {
   if (busy) return;
   messages = []; save(); msgsEl.innerHTML = ""; updateState(); input.focus();
 });
-if (window.visualViewport) visualViewport.addEventListener("resize", () => scrollDown(false));
+/* keep the composer above the iPhone keyboard */
+const appEl = $("#app");
+function fitViewport() {
+  const vv = window.visualViewport; if (!vv) return;
+  appEl.style.height = vv.height + "px";
+  if (window.scrollY) window.scrollTo(0, 0);
+  scrollDown(false);
+}
+if (window.visualViewport) { visualViewport.addEventListener("resize", fitViewport); visualViewport.addEventListener("scroll", () => { if (window.scrollY) window.scrollTo(0, 0); }); }
 
 /* ---------- themes ---------- */
 const sheetBg = $("#sheetBg"), themesEl = $("#themes");
@@ -238,9 +246,9 @@ function applyTheme(id) {
 function drawThemes() {
   const cur = currentTheme();
   themesEl.innerHTML = THEMES.map((t) =>
-    `<button class="theme${t.id === cur ? " on" : ""}" data-id="${t.id}" type="button">
-       <span class="sw" style="background:linear-gradient(135deg,${t.sw[0]} 0 40%,${t.sw[1]} 40% 72%,${t.sw[2]} 72%)"></span>
-       ${t.name}${t.id === cur ? '<span class="ck">✓</span>' : ""}</button>`).join("");
+    `<button class="theme${t.id === cur ? " on" : ""}" data-id="${t.id}" type="button" aria-pressed="${t.id === cur}">
+       <span class="sw" style="background:linear-gradient(135deg,${t.sw[0]} 0 50%,${t.sw[1]} 50%)"></span>
+       ${t.name}${t.id === cur ? '<svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ""}</button>`).join("");
 }
 $("#themeBtn").addEventListener("click", () => { drawThemes(); sheetBg.hidden = false; });
 sheetBg.addEventListener("click", (e) => { if (e.target === sheetBg) sheetBg.hidden = true; });
